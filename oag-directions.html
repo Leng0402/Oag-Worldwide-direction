@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAG Worldwide – Directions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #1a7a4a;
+    --green-light: #e8f5ee;
+    --green-mid: #2ea86a;
+    --red: #d63031;
+    --blue: #0066cc;
+    --blue-light: #e8f0fb;
+    --amber: #f5a623;
+    --amber-light: #fff8ec;
+    --gray-100: #f7f8fa;
+    --gray-200: #eceef2;
+    --gray-400: #b0b7c3;
+    --gray-600: #6b7280;
+    --gray-800: #1f2937;
+    --white: #ffffff;
+    --radius: 12px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-800);
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+  }
+
+  .page-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* ── LANGUAGE SWITCHER ── */
+  .lang-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .lang-btn {
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--gray-200);
+    background: var(--white);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: inherit;
+  }
+  .lang-btn:hover { border-color: var(--green-mid); color: var(--green); }
+  .lang-btn.active {
+    background: var(--green);
+    color: var(--white);
+    border-color: var(--green);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--green);
+    border-radius: var(--radius);
+    padding: 28px 28px 24px;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 6px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .header-sub {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+
+  /* ── ADDRESS + INFO CARDS ── */
+  .cards-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 520px) {
+    .cards-row { grid-template-columns: 1fr; }
+  }
+  .info-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .info-card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 8px;
+  }
+  .info-card-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .icon-green { background: var(--green-light); }
+  .icon-red   { background: #fdecea; }
+  .icon-blue  { background: var(--blue-light); }
+  .icon-amber { background: var(--amber-light); }
+  .info-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .info-card p  { font-size: 12.5px; color: var(--gray-600); line-height: 1.55; }
+
+  /* ── MAP IMAGE ── */
+  .map-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .map-card-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .map-card-header span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-800);
+  }
+  .map-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ── ROUTE STEPS ── */
+  .steps-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .steps-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .steps-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .steps-badge {
+    background: var(--amber-light);
+    color: #9a6700;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid #f5cc7a;
+  }
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-200);
+    transition: background 0.15s;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-item:hover { background: var(--gray-100); }
+
+  .step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--green);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-circle.start { background: var(--green); }
+  .step-circle.end   { background: var(--red); }
+
+  .step-body { flex: 1; }
+  .step-action {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+  .step-road {
+    font-size: 12px;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+  .step-dist {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .step-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    opacity: 0.6;
+  }
+
+  /* ── FINAL DESTINATION BANNER ── */
+  .dest-banner {
+    background: var(--green-light);
+    border: 1.5px solid #a8d8be;
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .dest-pin {
+    font-size: 28px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .dest-banner h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+  .dest-banner p {
+    font-size: 13px;
+    color: #2e6648;
+    line-height: 1.55;
+  }
+
+  /* ── CONTACT / HOURS ── */
+  .meta-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 520px) { .meta-row { grid-template-columns: 1fr; } }
+
+  /* ── GMAPS BUTTON ── */
+  .gmaps-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: var(--blue);
+    color: var(--white);
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: 0 3px 10px rgba(0,102,204,0.25);
+    transition: background 0.18s, transform 0.12s;
+  }
+  .gmaps-btn:hover { background: #004fa3; transform: translateY(-1px); }
+  .gmaps-btn span { opacity: 0.85; font-weight: 400; font-size: 12px; display: block; margin-top: 2px; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 11px;
+    color: var(--gray-400);
+  }
+
+  /* hidden lang content */
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+  .inline-lang { display: none; }
+  .inline-lang.visible { display: inline; }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- Language Switcher -->
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+    <button class="lang-btn" onclick="setLang('en')">English</button>
+    <button class="lang-btn" onclick="setLang('ms')">Bahasa</button>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-eyebrow">
+      <span data-lang="zh" class="visible">前往目的地</span>
+      <span data-lang="en">Getting There</span>
+      <span data-lang="ms">Panduan Perjalanan</span>
+    </div>
+    <h1>OAG Worldwide Sdn Bhd</h1>
+    <div class="header-sub">
+      <span data-lang="zh" class="visible">从 Lotus's Setia Alam 出发 · 约 5 分钟 · 1 公里</span>
+      <span data-lang="en">From Lotus's Setia Alam · ~5 min · 1 km</span>
+      <span data-lang="ms">Dari Lotus's Setia Alam · ±5 minit · 1 km</span>
+    </div>
+  </div>
+
+  <!-- Info Cards -->
+  <div class="cards-row">
+    <div class="info-card">
+      <div class="info-card-icon icon-green">🟢</div>
+      <div class="info-card-label">
+        <span data-lang="zh" class="visible">出发地</span>
+        <span data-lang="en">Start</span>
+        <span data-lang="ms">Tempat Mula</span>
+      </div>
+      <h3>Lotus's Setia Alam</h3>
+      <p>Persiaran Setia Dagang, Setia Alam, 40170 Shah Alam, Selangor</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon icon-red">🔴</div>
+      <div class="info-card-label">
+        <span data-lang="zh" class="visible">目的地</span>
+        <span data-lang="en">Destination</span>
+        <span data-lang="ms">Destinasi</span>
+      </div>
+      <h3>OAG Worldwide Sdn Bhd</h3>
+      <p>No.37-2, Setia Avenue, Jln Setia Prima S U13/S, Setia Alam, 40170 Shah Alam</p>
+    </div>
+  </div>
+
+  <!-- Map Image -->
+  <div class="map-card">
+    <div class="map-card-header">
+      <span>🗺️</span>
+      <span>
+        <span data-lang="zh" class="visible">路线地图</span>
+        <span data-lang="en">Route Map</span>
+        <span data-lang="ms">Peta Laluan</span>
+      </span>
+    </div>
+    <img src="Gemini_Generated_Image_hs8sg3hs8sg3hs8s.png" alt="Route map from Lotus Setia Alam to OAG Worldwide">
+  </div>
+
+  <!-- Step by Step Directions -->
+  <div class="steps-card">
+    <div class="steps-header">
+      <div class="steps-header-left">
+        🚗
+        <span>
+          <span data-lang="zh" class="visible">分步导航</span>
+          <span data-lang="en">Step-by-Step Directions</span>
+          <span data-lang="ms">Panduan Langkah demi Langkah</span>
+        </span>
+      </div>
+      <div class="steps-badge">
+        <span data-lang="zh" class="visible">全程 1 公里</span>
+        <span data-lang="en">Total 1 km</span>
+        <span data-lang="ms">Jumlah 1 km</span>
+      </div>
+    </div>
+
+    <!-- Step 0: Start -->
+    <div class="step-item">
+      <div class="step-circle start">🟢</div>
+      <div class="step-body">
+        <div class="step-action">
+          <span data-lang="zh" class="visible">从 Lotus's Setia Alam 出发</span>
+          <span data-lang="en">Depart from Lotus's Setia Alam</span>
+          <span data-lang="ms">Bertolak dari Lotus's Setia Alam</span>
+        </div>
+        <div class="step-road">Persiaran Setia Dagang, Setia Alam</div>
+      </div>
+      <div class="step-icon">🏁</div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-item">
+      <div class="step-circle">1</div>
+      <div class="step-body">
+        <div class="step-action">
+          <span data-lang="zh" class="visible">左转进入 Jln Setia Prima S U13/6</span>
+          <span data-lang="en">Turn LEFT onto Jln Setia Prima S U13/6</span>
+          <span data-lang="ms">Belok KIRI ke Jln Setia Prima S U13/6</span>
+        </div>
+        <div class="step-road">Jln Setia Prima S U13/6</div>
+      </div>
+      <div class="step-icon">↰</div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-item">
+      <div class="step-circle">2</div>
+      <div class="step-body">
+        <div class="step-action">
+          <span data-lang="zh" class="visible">靠左继续行驶</span>
+          <span data-lang="en">Keep LEFT and continue</span>
+          <span data-lang="ms">Ikut KIRI dan teruskan</span>
+        </div>
+        <div class="step-road">
+          <span data-lang="zh" class="visible">继续沿 Jln Setia Prima S U13/6 前行</span>
+          <span data-lang="en">Continue on Jln Setia Prima S U13/6</span>
+          <span data-lang="ms">Teruskan di Jln Setia Prima S U13/6</span>
+        </div>
+      </div>
+      <div class="step-icon">↑</div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-item">
+      <div class="step-circle">3</div>
+      <div class="step-body">
+        <div class="step-action">
+          <span data-lang="zh" class="visible">右转进入 Jalan Setia Prima V U13/V</span>
+          <span data-lang="en">Turn RIGHT onto Jalan Setia Prima V U13/V</span>
+          <span data-lang="ms">Belok KANAN ke Jalan Setia Prima V U13/V</span>
+        </div>
+        <div class="step-road">Jalan Setia Prima V U13/V</div>
+      </div>
+      <div class="step-icon">↱</div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-item">
+      <div class="step-circle">4</div>
+      <div class="step-body">
+        <div class="step-action">
+          <span data-lang="zh" class="visible">在 T 形路口左转</span>
+          <span data-lang="en">At the T-junction, turn LEFT</span>
+          <span data-lang="ms">Di simpang-T, belok KIRI</span>
+        </div>
+        <div class="step-road">
+          <span data-lang="zh" class="visible">继续沿 Jalan Setia Prima V U13/V 前行</span>
+          <span data-lang="en">Continue on Jalan Setia Prima V U13/V</span>
+          <span data-lang="ms">Teruskan di Jalan Setia Prima V U13/V</span>
+        </div>
+      </div>
+      <div class="step-icon">↰</div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-item">
+      <div class="step-circle">5</div>
+      <div class="step-body">
+        <div class="step-action">
+          <span data-lang="zh" class="visible">右转进入 Jalan Astaka U8/82</span>
+          <span data-lang="en">Turn RIGHT onto Jalan Astaka U8/82</span>
+          <span data-lang="ms">Belok KANAN ke Jalan Astaka U8/82</span>
+        </div>
+        <div class="step-road">Jalan Astaka U8/82</div>
+      </div>
+      <div class="step-icon">↱</div>
+    </div>
+
+    <!-- Step 6 / Destination -->
+    <div class="step-item">
+      <div class="step-circle end">🔴</div>
+      <div class="step-body">
+        <div class="step-action">
+          <span data-lang="zh" class="visible">目的地在左侧 — 已到达！</span>
+          <span data-lang="en">Destination is on the LEFT — You've arrived!</span>
+          <span data-lang="ms">Destinasi di sebelah KIRI — Anda sudah tiba!</span>
+        </div>
+        <div class="step-road">
+          <span data-lang="zh" class="visible">OAG Worldwide Sdn Bhd · No.37-2, Setia Avenue</span>
+          <span data-lang="en">OAG Worldwide Sdn Bhd · No.37-2, Setia Avenue</span>
+          <span data-lang="ms">OAG Worldwide Sdn Bhd · No.37-2, Setia Avenue</span>
+        </div>
+      </div>
+      <div class="step-icon">📍</div>
+    </div>
+
+  </div>
+
+  <!-- Destination Banner -->
+  <div class="dest-banner">
+    <div class="dest-pin">📍</div>
+    <div>
+      <h3>OAG Worldwide Sdn Bhd</h3>
+      <p>No.37-2, Setia Avenue, Jln Setia Prima S U13/S,<br>Setia Alam, 40170 Shah Alam, Selangor</p>
+      <p style="margin-top:6px;">
+        <span data-lang="zh" class="visible">📞 +60 3-3358 6003 &nbsp;|&nbsp; ⏰ 周一至五 9:00am – 8:00pm &nbsp;|&nbsp; 周六 9:00am – 5:00pm</span>
+        <span data-lang="en">📞 +60 3-3358 6003 &nbsp;|&nbsp; ⏰ Mon–Fri 9:00am – 8:00pm &nbsp;|&nbsp; Sat 9:00am – 5:00pm</span>
+        <span data-lang="ms">📞 +60 3-3358 6003 &nbsp;|&nbsp; ⏰ Isnin–Jumaat 9:00pg – 8:00mlm &nbsp;|&nbsp; Sabtu 9:00pg – 5:00ptg</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Google Maps Button -->
+  <a class="gmaps-btn" href="https://maps.google.com/?q=No.37-2,+Setia+Avenue,+Jln+Setia+Prima+S+U13/S,+Setia+Alam,+40170+Shah+Alam,+Selangor" target="_blank">
+    <span data-lang="zh" class="visible">在 Google Maps 中开启导航</span>
+    <span data-lang="en">Open in Google Maps</span>
+    <span data-lang="ms">Buka di Google Maps</span>
+    <span>
+      <span class="inline-lang" data-lang="zh" style="display:inline;">No.37-2, Setia Avenue, Setia Alam</span>
+      <span class="inline-lang" data-lang="en">No.37-2, Setia Avenue, Setia Alam</span>
+      <span class="inline-lang" data-lang="ms">No.37-2, Setia Avenue, Setia Alam</span>
+    </span>
+  </a>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span data-lang="zh" class="visible">行驶时间因路况而异 · 建议出发前确认最新路况</span>
+    <span data-lang="en">Travel time may vary due to traffic · Please check current conditions before departure</span>
+    <span data-lang="ms">Masa perjalanan bergantung pada keadaan trafik · Sila semak keadaan terkini sebelum berlepas</span>
+  </div>
+
+</div>
+
+<script>
+  function setLang(lang) {
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      el.classList.toggle('visible', el.getAttribute('data-lang') === lang);
+    });
+    document.querySelectorAll('.lang-btn').forEach((btn, i) => {
+      const langs = ['zh','en','ms'];
+      btn.classList.toggle('active', langs[i] === lang);
+    });
+    document.documentElement.lang = lang;
+  }
+</script>
+
+</body>
+</html>
